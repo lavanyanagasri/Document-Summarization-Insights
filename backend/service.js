@@ -1,5 +1,11 @@
 import dotenv from "dotenv";
 dotenv.config();
+import cors from "cors";
+
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST"]
+}));
 
 import express from "express";
 import mongoose from "mongoose";
