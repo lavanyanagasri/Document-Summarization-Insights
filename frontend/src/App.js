@@ -24,7 +24,7 @@ function App() {
       setResult(null);
 
       const res = await axios.post(
-        "http://localhost:5000/api/documents/upload",
+        "https://document-summarization-insights.onrender.com/",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
