@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Result from "./Result";
 import "./index.css";
 
 function App() {
@@ -24,14 +23,13 @@ function App() {
       setResult(null);
 
       const res = await axios.post(
-        "https://document-summarization-insights.onrender.com/",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        "https://document-summarization-insights.onrender.com/api/documents/upload",
+        formData
       );
 
       setResult(res.data);
     } catch (err) {
-      setError(err.response?.data?.error || "Upload or processing failed");
+      setError(err.response?.data?.error || "Upload failed");
     } finally {
       setLoading(false);
     }
@@ -40,9 +38,13 @@ function App() {
   return (
     <div className="container">
       <h2>📄 Document Summarization & Insights</h2>
-      <p>Upload a PDF or TXT document to generate AI insights</p>
 
-      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+      <input
+        type="file"
+        accept=".txt,.pdf"
+        onChange={(e) => setFile(e.target.files[0])}
+      />
+
       <br /><br />
 
       <button onClick={handleUpload} disabled={loading}>
@@ -51,7 +53,19 @@ function App() {
 
       {error && <p className="error">{error}</p>}
 
-      {result && <Result data={result} />}
+      {result && (
+        <div className="result">
+          <h3>Summary</h3>
+          <p>{result.summary}</p>
+
+          <h3>Insights</h3>
+          <ul>
+            {result.insights.map((i, idx) => (
+              <li key={idx}>{i}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
